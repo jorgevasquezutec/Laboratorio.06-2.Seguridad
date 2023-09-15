@@ -15,6 +15,7 @@ clave = cargar_clave()
 f = Fernet(clave)
 API_KEY='000000111111'
 
+
 def api_key_required(api_key_info):
     def decorator(func):
         @wraps(func)
@@ -35,6 +36,10 @@ def api_key_required(api_key_info):
         return decorated_function
     return decorator
 
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
 
 @app.route('/group01')
 @api_key_required({'key': API_KEY, 'allow': True})

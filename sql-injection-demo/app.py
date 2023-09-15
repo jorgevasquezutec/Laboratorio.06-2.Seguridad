@@ -5,6 +5,10 @@ import json
 
 app = Flask(__name__)
 
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
 @app.route('/checkUser')
 def checkUser():
     user_arg = request.args.get('user')
@@ -13,12 +17,14 @@ def checkUser():
     print(user_arg, pass_arg)
 
     conn = psycopg2.connect(
-        database="security", user='postgres', password='postgres', host='127.0.0.1', port= '5432'
+        database="postgres", user='myuser', password='mypassword', host='127.0.0.1', port= '5432'
     )
 
     cursor = conn.cursor()
-
+    # query = """SELECT user_name FROM user_data WHERE user_name = '"""+user_arg+"""' and user_password = '"""+pass_arg+"""'"""
+    # print(query)
     cursor.execute("""SELECT user_name FROM user_data WHERE user_name = %(user)s and user_password = %(pass)s""", {'user': user_arg, 'pass': pass_arg } )
+    # cursor.execute(query)
 
     record = cursor.fetchall()
 
@@ -33,7 +39,8 @@ def checkUser():
         return jsonify(json.dumps(record, indent = 4) )
 
 if __name__ == "__main__":
-    app.run(debug=True, port=6000)
+    # print("Running in port 6000")
+    app.run(debug=True, port=5000)
 
 # readme 
 # pip install flask
